@@ -1,0 +1,149 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Todo Sample App
+host: localhost:10010
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /todo:
+    x-swagger-router-controller: todo_api
+    get:
+      description: TODOリストを取得する
+      operationId: getTodoList
+      parameters:
+        - name: offset
+          in: query
+          description: オフセット
+          type: integer
+          default: 0
+        - name: limit
+          in: query
+          description: リミット
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: Success Get
+          schema:
+            $ref: "#/definitions/TodoListResponse"
+    post:
+      description: TODOを作成する
+      operationId: createTodo
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TodoCreateForm"
+      responses:
+        201:
+          description: Success Create
+          schema:
+            $ref: "#/definitions/Todo"
+  /todo/{todoId}:
+    x-swagger-router-controller: todo_api
+    put:
+      description: TODOを更新する
+      operationId: updateTodo
+      parameters:
+        - name: todoId
+          in: path
+          required: true
+          type: integer
+          format: int64
+          description: todoId
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TodoUpdateForm"
+      responses:
+        200:
+          description: Success Update
+          schema:
+            $ref: "#/definitions/Todo"
+    delete:
+      description: TODOを削除する
+      operationId: deleteTodo
+      parameters:
+        - name: todoId
+          in: path
+          type: integer
+          format: int64
+          required: true
+          description: todoId
+      responses:
+        204:
+          description: Success Delete
+  /swagger:
+    x-swagger-pipe: swagger_raw
+definitions:
+  TodoListResponse:
+    properties:
+      total:
+        type: integer
+        description: トータル数
+      list:
+        type: array
+        items:
+          $ref: "#/definitions/Todo"
+    required:
+      - list
+  TodoCreateForm:
+    properties:
+      title:
+        type: string
+        description: タイトル
+      description:
+        type: string
+        description: 説明
+    required:
+      - title
+      - description
+  TodoUpdateForm:
+    properties:
+      title:
+        type: string
+        description: タイトル
+      description:
+        type: string
+        description: 説明
+      isFinished:
+        type: boolean
+        description: 終了したかどうか
+    required:
+      - title
+      - description
+      - isFinished
+  Todo:
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: ID
+      title:
+        type: string
+        description: タイトル
+      description:
+        type: string
+        description: 説明
+      createTime:
+        type: string
+        description: 作成日時
+      isFinished:
+        type: boolean
+      finishedTime:
+        type: string
+        description: 終了日時
+    required:
+      - id
+      - title
+      - description
+      - createTime
+      - isFinished
