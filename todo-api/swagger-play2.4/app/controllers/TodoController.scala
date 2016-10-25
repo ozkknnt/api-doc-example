@@ -26,8 +26,13 @@ class TodoController @Inject()(
     value = "getTodoList",
     notes = "notes",
     response = classOf[TodoListResponse],
-    httpMethod = "GET"
+    httpMethod = "GET",
+    produces = "application/json"
   )
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "offset", value = "オフセット", required = false, dataType = "integer", paramType = "query", defaultValue = "0"),
+    new ApiImplicitParam(name = "limit", value = "リミット", required = false, dataType = "integer", paramType = "query", defaultValue = "10")
+  ))
   def list: Action[AnyContent] = Action { implicit request =>
     searchForm.bindFromRequest.fold(
       error => BadRequest("invalid param"),
@@ -57,8 +62,13 @@ class TodoController @Inject()(
     value = "createTodo",
     notes = "notes",
     response = classOf[Todo],
-    httpMethod = "POST"
+    httpMethod = "POST",
+    consumes = "application/json",
+    produces = "application/json"
   )
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "body", value = "todo create form", required = true, dataType = "models.TodoCreateForm", paramType = "body")
+  ))
   def create(): Action[JsValue] = Action(BodyParsers.parse.json) { implicit request =>
     request.body.validate[TodoCreateForm].fold(
       error => BadRequest("invalid form"),
@@ -79,8 +89,13 @@ class TodoController @Inject()(
     value = "updateTodo",
     notes = "notes",
     response = classOf[Todo],
-    httpMethod = "PUT"
+    httpMethod = "PUT",
+    consumes = "application/json",
+    produces = "application/json"
   )
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "body", value = "todo update form", required = true, dataType = "models.TodoUpdateForm", paramType = "body")
+  ))
   def update(
     @ApiParam(value = "todo ID") id: Long): Action[JsValue] = Action(BodyParsers.parse.json) { implicit request =>
     request.body.validate[TodoUpdateForm].fold(

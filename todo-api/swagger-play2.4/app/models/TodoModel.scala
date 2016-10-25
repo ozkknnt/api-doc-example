@@ -1,14 +1,17 @@
 package models
 
-import io.swagger.annotations.ApiModel
+import io.swagger.annotations.{ApiModelProperty, ApiModel}
 import play.api.libs.json.Json
 
+import scala.annotation.meta.field
+
+// FIXME: 本来は、プロパティごとにrequiredの定義をする必要はないはず。
 @ApiModel("Todo")
 case class Todo(
-  id: Long,
-  title: String,
-  description: String,
-  isFinished: Boolean
+  @(ApiModelProperty @field)(required = true) id: Long,
+  @(ApiModelProperty @field)(required = true) title: String,
+  @(ApiModelProperty @field)(required = true) description: String,
+  @(ApiModelProperty @field)(required = true) isFinished: Boolean
 )
 
 object Todo {
@@ -17,8 +20,8 @@ object Todo {
 
 @ApiModel("TodoListResponse")
 case class TodoListResponse(
-  total: Int,
-  list: Seq[Todo]
+  @(ApiModelProperty @field)(required = true) total: Int,
+  @(ApiModelProperty @field)(required = true) list: Seq[Todo]
 )
 
 object TodoListResponse {
@@ -27,8 +30,8 @@ object TodoListResponse {
 
 @ApiModel("TodoCreateForm")
 case class TodoCreateForm(
-  title: String,
-  description: String
+  @(ApiModelProperty @field)(required = true) title: String,
+  @(ApiModelProperty @field)(required = true) description: String
 )
 
 object TodoCreateForm {
@@ -37,9 +40,9 @@ object TodoCreateForm {
 
 @ApiModel("TodoUpdateForm")
 case class TodoUpdateForm(
-  title: String,
-  description: String,
-  isFinished: Boolean
+  @(ApiModelProperty @field)(required = true) title: String,
+  @(ApiModelProperty @field)(required = true) description: String,
+  @(ApiModelProperty @field)(required = true) isFinished: Boolean
 )
 
 object TodoUpdateForm {
