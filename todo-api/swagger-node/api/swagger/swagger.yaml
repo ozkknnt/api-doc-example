@@ -10,10 +10,14 @@ consumes:
   - application/json
 produces:
   - application/json
+tags:
+  - name: todo
 paths:
   /todo:
     x-swagger-router-controller: todo_api
     get:
+      tags:
+        - todo
       description: TODOリストを取得する
       operationId: getTodoList
       parameters:
@@ -33,6 +37,8 @@ paths:
           schema:
             $ref: "#/definitions/TodoListResponse"
     post:
+      tags:
+        - todo
       description: TODOを作成する
       operationId: createTodo
       parameters:
@@ -49,6 +55,8 @@ paths:
   /todo/{todoId}:
     x-swagger-router-controller: todo_api
     put:
+      tags:
+        - todo
       description: TODOを更新する
       operationId: updateTodo
       parameters:
@@ -69,6 +77,8 @@ paths:
           schema:
             $ref: "#/definitions/Todo"
     delete:
+      tags:
+        - todo
       description: TODOを削除する
       operationId: deleteTodo
       parameters:
@@ -81,8 +91,6 @@ paths:
       responses:
         204:
           description: Success Delete
-  /swagger:
-    x-swagger-pipe: swagger_raw
 definitions:
   TodoListResponse:
     properties:
@@ -133,17 +141,10 @@ definitions:
       description:
         type: string
         description: 説明
-      createTime:
-        type: string
-        description: 作成日時
       isFinished:
         type: boolean
-      finishedTime:
-        type: string
-        description: 終了日時
     required:
       - id
       - title
       - description
-      - createTime
       - isFinished

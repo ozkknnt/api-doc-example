@@ -1,40 +1,64 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import models.{Todo, TodoCreateForm, TodoListResponse, TodoUpdateForm}
-import org.joda.time.DateTime
+import io.swagger.annotations._
+import models._
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 
 @Singleton
+@Api(value = "todo")
 class TodoController @Inject()(
 
 ) extends Controller {
 
+  val searchForm = Form(
+    mapping(
+      "offset" -> default(number, 0),
+      "limit" -> default(number, 10)
+    )(SearchForm.apply)(SearchForm.unapply)
+  )
+
+  @ApiOperation(
+    nickname = "getTodoList",
+    value = "getTodoList",
+    notes = "notes",
+    response = classOf[TodoListResponse],
+    httpMethod = "GET"
+  )
   def list: Action[AnyContent] = Action { implicit request =>
-    val todoList = TodoListResponse(
-      total = 2,
-      list = Seq(
-      Todo(
-        id = 1,
-        title = "タイトル1",
-        description = "description1",
-        isFinished = true,
-        createTime = new DateTime("2016-10-20"),
-        finishedTime = Some(new DateTime("2016-10-23"))
-      ),
-      Todo(
-        id = 2,
-        title = "タイトル2",
-        description = "description2",
-        isFinished = false,
-        createTime = new DateTime("2016-10-22"),
-        finishedTime = None
-      )
-    ))
-    Ok(Json.toJson(todoList))
+    searchForm.bindFromRequest.fold(
+      error => BadRequest("invalid param"),
+      form => {
+        val todoList = TodoListResponse(
+          total = 2,
+          list = Seq(
+          Todo(
+            id = 1,
+            title = "タイトル1",
+            description = "description1",
+            isFinished = true
+          ),
+          Todo(
+            id = 2,
+            title = "タイトル2",
+            description = "description2",
+            isFinished = false
+          )))
+        Ok(Json.toJson(todoList))
+      }
+    )
   }
 
+  @ApiOperation(
+    nickname = "createTodo",
+    value = "createTodo",
+    notes = "notes",
+    response = classOf[Todo],
+    httpMethod = "POST"
+  )
   def create(): Action[JsValue] = Action(BodyParsers.parse.json) { implicit request =>
     request.body.validate[TodoCreateForm].fold(
       error => BadRequest("invalid form"),
@@ -43,16 +67,22 @@ class TodoController @Inject()(
           id = System.currentTimeMillis(),
           title = form.title,
           description = form.description,
-          isFinished = false,
-          createTime = DateTime.now,
-          finishedTime = None
+          isFinished = false
         )
         Created(Json.toJson(createdTodo))
       }
     )
   }
 
-  def update(id: Long): Action[JsValue] = Action(BodyParsers.parse.json) { implicit request =>
+  @ApiOperation(
+    nickname = "updateTodo",
+    value = "updateTodo",
+    notes = "notes",
+    response = classOf[Todo],
+    httpMethod = "PUT"
+  )
+  def update(
+    @ApiParam(value = "todo ID") id: Long): Action[JsValue] = Action(BodyParsers.parse.json) { implicit request =>
     request.body.validate[TodoUpdateForm].fold(
       error => BadRequest("invalid form"),
       form => {
@@ -60,16 +90,22 @@ class TodoController @Inject()(
           id = id,
           title = form.title,
           description = form.description,
-          isFinished = false,
-          createTime = DateTime.now,
-          finishedTime = if (form.isFinished) Some(DateTime.now) else None
+          isFinished = false
         )
         Ok(Json.toJson(updatedTodo))
       }
     )
   }
 
-  def delete(id: Long): Action[AnyContent] = Action { implicit request =>
+  // TODO: レスポンスタイプがAnyContentになるので直す
+  @ApiOperation(
+    nickname = "deleteTodo",
+    value = "deleteTodo",
+    notes = "notes",
+    httpMethod = "DELETE"
+  )
+  def delete(
+    @ApiParam(value = "todo ID") id: Long) = Action { implicit request =>
     NoContent
   }
 }

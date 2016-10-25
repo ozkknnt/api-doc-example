@@ -25,23 +25,14 @@ describe('/todo/{todoId}', function() {
             "type": "string",
             "description": "説明"
           },
-          "createTime": {
-            "type": "string",
-            "description": "作成日時"
-          },
           "isFinished": {
             "type": "boolean"
-          },
-          "finishedTime": {
-            "type": "string",
-            "description": "終了日時"
           }
         },
         "required": [
           "id",
           "title",
           "description",
-          "createTime",
           "isFinished"
         ]
       };
