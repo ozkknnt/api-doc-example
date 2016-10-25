@@ -9,7 +9,7 @@ schemes:
 consumes:
   - application/json
 produces:
-  - application/json
+  - application/json; charset=utf-8
 tags:
   - name: todo
 paths:
@@ -66,6 +66,7 @@ paths:
           type: integer
           format: int64
           description: todoId
+          x-example: 1
         - name: body
           in: body
           required: true
@@ -88,6 +89,7 @@ paths:
           format: int64
           required: true
           description: todoId
+          x-example: 2
       responses:
         204:
           description: Success Delete

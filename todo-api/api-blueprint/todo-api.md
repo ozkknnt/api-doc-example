@@ -9,13 +9,13 @@ HOST: http://localhost:9000
 + Parameters
     + offset: 0 (number, optional) - オフセット
     + limit: 10 (number, optional) - リミット
-+ Response 200 (application/json)
++ Response 200 (application/json; charset=utf-8)
     + Attributes (TodoListResponse)
 
 ## TODOを作成する [POST /todo]
 + Request (application/json)
     + Attributes (TodoCreateForm)
-+ Response 201 (application/json)
++ Response 201 (application/json; charset=utf-8)
     + Attributes (Todo)
 
 ## TODOの更新・削除 [/todo/{todoId}]
@@ -24,7 +24,7 @@ HOST: http://localhost:9000
     + todoId: 2 (number, required) - todo ID
 + Request (application/json)
     + Attributes (TodoUpdateForm)
-+ Response 200 (application/json)
++ Response 200 (application/json; charset=utf-8)
     + Attributes (Todo)
 
 ### TODOを削除する [DELETE]
