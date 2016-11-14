@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "api blueprint documentation project",
+  "main": "index.js",
+  "devDependencies": {
+    "aglio": "^2.2.1",
+    "dredd": "^2.2.3"
+  },
+  "scripts": {
+    "start": "open http://localhost:8082 && ./node_modules/aglio/bin/aglio.js --theme-full-width -i ./api-blueprint/todo-api.md -s -p 8082",
+    "test": "./node_modules/dredd/bin/dredd --config ./dredd/api-blueprint/dredd.yml",
+    "aglio": "./node_modules/aglio/bin/aglio.js --theme-full-width -i ./api-blueprint/todo-api.md -o ./api-blueprint/jse-api.html"
+  },
+  "author": "",
+  "license": "ISC"
+}
