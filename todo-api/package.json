@@ -4,8 +4,8 @@
   "description": "api blueprint documentation project",
   "main": "index.js",
   "devDependencies": {
-    "aglio": "^2.2.1",
-    "dredd": "^2.2.3"
+    "aglio": "^2.3.0",
+    "dredd": "^2.2.5"
   },
   "scripts": {
     "start": "open http://localhost:8082 && ./node_modules/aglio/bin/aglio.js --theme-full-width -i ./api-blueprint/todo-api.md -s -p 8082",
